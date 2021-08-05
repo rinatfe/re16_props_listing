@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 class Listing extends Component {
     constructor(props) {
         super(props);
-        this.render = this.render.bind(this);
     }
 
     static propTypes = {
@@ -18,13 +17,14 @@ class Listing extends Component {
                {items.map(i => {
                    let titleStyle;
                    let style;
+                   let currencyCode;
                    if(i.title == undefined) {
                        return false;
                    }
                    if(i.title.length > 50) {
-                    titleStyle = 'item-title long';
+                    titleStyle = i.title.slice(0, 47) + '...';
                    } else {
-                      titleStyle = 'item-title';
+                      titleStyle = i.title;
                    }
                    if(i.quantity <= 10) {
                        style = 'level-low';
@@ -32,6 +32,15 @@ class Listing extends Component {
                        style = 'level-medium';
                    } else {
                         style = 'level-high';
+                   }
+                   if(i.currency_code == "USD") {
+                       currencyCode = "$"
+                   } else if(i.currency_code == "EUR") {
+                       currencyCode = "€"
+                   } else if(i.currency_code == "CAD") {
+                        currencyCode = "C$"
+                   } else if(i.currency_code == "GBP") {
+                       currencyCode = "£"
                    }
                    return (
                         <div key={i.listing_id} classNAme="item">
@@ -41,8 +50,8 @@ class Listing extends Component {
                                 </a>
                             </div>
                             <div key={i.listing_id} className="item-details">
-                                <p className={titleStyle}>{i.title}</p>
-                                <p className="item-price">{`${i.currency_code} ${i.price}`}</p>
+                                <p className="item-title">{titleStyle}</p>
+                                <p className="item-price">{`${currencyCode} ${i.price}`}</p>
                                 <p className={`item-quantity ${style}`}>{i.quantity} left</p>
                             </div>
                         </div>
